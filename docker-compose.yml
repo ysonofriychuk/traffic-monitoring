@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  scapy-server:
+    build:
+      context: .
+      dockerfile: docker/scapy.Dockerfile
+    hostname: scapy
+    container_name: exp-scapy-server
+    image: exp-net-scapy
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./src:/scapy/src
+    networks:
+      net-1:
+        ipv4_address: 192.168.1.2
+    dns:
+      - "8.8.8.8"
+
+  scapy-client-1:
+    build:
+      context: .
+      dockerfile: docker/scapy.Dockerfile
+    hostname: scapy
+    container_name: exp-scapy-client-1
+    image: exp-net-scapy
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./src:/scapy/src
+    networks:
+      net-1:
+        ipv4_address: 192.168.1.3
+    dns:
+      - "8.8.8.8"
+
+  scapy-client-2:
+    build:
+      context: .
+      dockerfile: docker/scapy.Dockerfile
+    hostname: scapy
+    container_name: exp-scapy-client-2
+    image: exp-net-scapy
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./src:/scapy/src
+    networks:
+      net-1:
+        ipv4_address: 192.168.1.4
+    dns:
+      - "8.8.8.8"
+
+networks:
+  net-1:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
