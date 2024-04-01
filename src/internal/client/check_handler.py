@@ -3,6 +3,8 @@ from scapy.fields import FlagValue
 from scapy.layers.inet import IP, TCP
 from scapy.interfaces import NetworkInterface
 
+from ..core.settings import SETTINGS
+
 
 def reliability_coefficient(ip_pac: IP, tcp_pac: TCP, raw_pac: scapy.Raw) -> float:
     """
@@ -16,21 +18,47 @@ def reliability_coefficient(ip_pac: IP, tcp_pac: TCP, raw_pac: scapy.Raw) -> flo
     if any([not tcp_pac, not ip_pac, not raw_pac]):
         return 0
 
+    raw_load: bytes = raw_pac.load
+    raw_load_str: str = raw_load.decode("utf-8")
+
+    key_settings = raw_load_str.replace("check->", "")
+    settings = SETTINGS.get(key_settings)
+
+    if not settings:
+        return 0
+
     tcp_flags: FlagValue = tcp_pac.flags
     ip_flags: FlagValue = ip_pac.flags
 
     ip_tos: int = ip_pac.tos
-    ip_flags_value: int = ip_flags.value if tcp_flags else -1
+    ip_flags_value: int = ip_flags.value
     ip_ttl: int = ip_pac.ttl
 
+    expected_ip_tos: int = settings.tos
+    expected_ip_flags_value: int = settings.ip_flags
+    expected_ip_ttl: int = settings.ttl
+
     tcp_urgptr: int = tcp_pac.urgptr
-    tcp_flags_value: int = tcp_flags.value if tcp_flags else -1
+    tcp_flags_value: int = tcp_flags.value
     tcp_seq: int = tcp_pac.seq
     tcp_ack: int = tcp_pac.ack
 
-    raw_load: bytes = raw_pac.load
+    expected_tcp_urgptr: int = settings.urgptr
+    expected_tcp_flags_value: int = settings.tcp_flags
+    expected_tcp_seq: int = settings.seq
+    expected_tcp_ack: int = settings.ack
 
-    return 1
+    checks = [
+        ip_tos == expected_ip_tos,
+        ip_flags_value == expected_ip_flags_value,
+        ip_ttl == expected_ip_ttl,
+        tcp_urgptr == expected_tcp_urgptr,
+        tcp_flags_value == expected_tcp_flags_value,
+        tcp_seq == expected_tcp_seq,
+        tcp_ack == expected_tcp_ack
+    ]
+
+    return sum(checks) / len(checks) if checks else 0
 
 
 def handler(iface: NetworkInterface, ip_pac: IP, tcp_pac: TCP, raw_pac: scapy.Raw):
