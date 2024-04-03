@@ -19,12 +19,10 @@ def get_clients() -> list[client.Client]:
     ether = Ether(dst="ff:ff:ff:ff:ff:ff")
     arp = ARP(pdst=config.IPS_MASK)
 
-    answers, unanswered = srp(ether / arp, timeout=1, iface=get_iface(), inter=0.1, verbose=False)
+    answers, unanswered = srp(ether / arp, timeout=5, iface=get_iface(), inter=0.1, verbose=False)
 
-    clients = []
+    clients = {}
     for _, received in answers:
-        clients.append(
-            client.Client(ip=received.psrc, mac=received.hwsrc)
-        )
+        clients[received.psrc] = client.Client(ip=received.psrc, mac=received.hwsrc)
 
-    return clients
+    return list(clients.values())

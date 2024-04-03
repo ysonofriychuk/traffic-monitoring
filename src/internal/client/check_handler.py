@@ -3,6 +3,7 @@ from scapy.fields import FlagValue
 from scapy.layers.inet import IP, TCP
 from scapy.interfaces import NetworkInterface
 
+from ..core import config
 from ..core.settings import SETTINGS
 
 
@@ -64,4 +65,11 @@ def reliability_coefficient(ip_pac: IP, tcp_pac: TCP, raw_pac: scapy.Raw) -> flo
 def handler(iface: NetworkInterface, ip_pac: IP, tcp_pac: TCP, raw_pac: scapy.Raw):
     k = reliability_coefficient(ip_pac, tcp_pac, raw_pac)
 
-    print(f">>> Check {k}")
+    ip_pac = IP(dst=ip_pac.src)
+    tcp_pac = TCP(sport=int(config.PORT), dport=int(config.PORT))
+    raw_pac = scapy.Raw(load=f"answer->{round(k, 3)}")
+
+    pac = ip_pac / tcp_pac / raw_pac
+
+    print(f"{iface.ip} >>> {ip_pac.src} | REQUEST 'answer->{round(k, 3)}'")
+    scapy.send(pac, iface=iface, verbose=0)

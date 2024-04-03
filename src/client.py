@@ -7,7 +7,6 @@ from scapy.layers.inet import IP, TCP
 from internal.core import core
 from internal.core import config
 
-from internal.client import ping_handler
 from internal.client import check_handler
 
 IFACE = core.get_iface()
@@ -25,16 +24,14 @@ def proc_func(packet: scapy.packet.Packet):
     raw_load: bytes = raw_pac.load
     cmd = raw_load.decode("utf-8")
 
-    print(f"Request '{cmd}' <<<", ip_pac.src)
+    print(f"{ip_pac.src} >>> {ip_pac.dst} | INPUT '{cmd}'")
 
-    if cmd == "ping":
-        ping_handler.handler(IFACE, ip_pac, tcp_pac, raw_pac)
-    elif cmd.startswith("check->"):
+    if cmd.startswith("check->"):
         check_handler.handler(IFACE, ip_pac, tcp_pac, raw_pac)
     else:
-        print(f"\tUnknown cmd")
+        print(f"\tUnknown signature")
 
 
 if __name__ == "__main__":
-    print("Клиент запущен")
+    print(f"Клиент запущен [IP = {IFACE.ip}]")
     scapy.sniff(filter=config.FILTER_PAC, prn=proc_func, iface=IFACE)
