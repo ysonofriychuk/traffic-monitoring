@@ -4,16 +4,16 @@ from threading import Thread, Lock
 
 import scapy.all as scapy
 from scapy.interfaces import NetworkInterface
+from scapy.layers.inet import IP, TCP
 
-from ..core import settings
-from ..core.builder import PacBuilder
+from ..core import core, config
 from ..db.db import Database
 
 
 logger = logging.getLogger(__name__)
 
 
-class Checker(Thread):
+class Pinger(Thread):
     def __init__(self, iface: NetworkInterface, db: Database, delay=None):
         super().__init__(daemon=True)
 
@@ -32,19 +32,22 @@ class Checker(Thread):
             copy_is_run = self.is_run
             self.mutex.release()
 
-            clients_info = self.db.get_clients_info()
+            clients = core.get_clients(self.iface)
 
-            for client_info in clients_info:
-                ip, variant = client_info
+            self.db.update_clients_info(
+                [(c.ip, c.mac, c.variant) for c in clients]
+            )
 
-                logger.info(f"outgoing request {self.iface.ip} >>> {ip}, raw = check->{variant}")
+            for client in clients:
+                ip_pac = IP(dst=client.ip)
+                tcp_pac = TCP(sport=int(config.PORT), dport=int(config.PORT))
+                raw_pac = scapy.Raw(load=f"ping->{client.variant}")
 
-                pac_builder: PacBuilder = settings.SETTINGS[variant]
-                scapy.send(
-                    pac_builder.build_pac(ip, f"check->{variant}"),
-                    iface=self.iface,
-                    verbose=0
-                )
+                pac = ip_pac / tcp_pac / raw_pac
+
+                logger.info(f"outgoing request {self.iface.ip} >>> {client.ip}, raw = ping->{client.variant}")
+
+                scapy.send(pac, iface=self.iface, verbose=0)
 
             if self.delay:
                 time.sleep(self.delay)
@@ -53,3 +56,4 @@ class Checker(Thread):
         self.mutex.acquire()
         self.is_run = False
         self.mutex.release()
+

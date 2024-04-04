@@ -13,8 +13,8 @@ services:
     volumes:
       - ./src:/scapy/src
     networks:
-      net-1:
-        ipv4_address: 192.168.1.2
+      net:
+        ipv4_address: 10.5.0.10
     dns:
       - "8.8.8.8"
 
@@ -30,8 +30,8 @@ services:
     volumes:
       - ./src:/scapy/src
     networks:
-      net-1:
-        ipv4_address: 192.168.1.3
+      net:
+        ipv4_address: 10.5.0.2
     dns:
       - "8.8.8.8"
 
@@ -47,14 +47,14 @@ services:
     volumes:
       - ./src:/scapy/src
     networks:
-      net-1:
-        ipv4_address: 192.168.1.4
+      net:
+        ipv4_address: 10.5.0.3
     dns:
       - "8.8.8.8"
 
 networks:
-  net-1:
+  net:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.1.0/24
+        - subnet: 10.5.0.0/24

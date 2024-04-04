@@ -15,11 +15,11 @@ def get_iface(iface_name=config.IFACE_NAME) -> NetworkInterface:
     raise f"{iface_name} iface not found"
 
 
-def get_clients() -> list[client.Client]:
+def get_clients(iface: NetworkInterface) -> list[client.Client]:
     ether = Ether(dst="ff:ff:ff:ff:ff:ff")
     arp = ARP(pdst=config.IPS_MASK)
 
-    answers, unanswered = srp(ether / arp, timeout=5, iface=get_iface(), inter=0.1, verbose=False)
+    answers, unanswered = srp(ether / arp, timeout=1, iface=iface, inter=0.1, verbose=False)
 
     clients = {}
     for _, received in answers:

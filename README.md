@@ -13,42 +13,39 @@
 Клиент получает эти пакеты, рассчитывает коэффициент достоверности и 
 отправляет ответ обратно серверу.
 
-## Начало работы
+TODO: добавить схему обмена
 
-Перед началом работы убедитесь, что установлен Docker и Docker Compose.
+## Запуск и тестирование приложения
 
-Для запуска проекта необходимо собрать и запустить контейнеры из [docker-compose.yml](docker-compose.yml).
+Перед началом работы убедитесь, что установлен Docker и Docker Compose, 
+а также, проверьте [config.py](src%2Finternal%2Fcore%2Fconfig.py) файл с настройками.
 
-```shell
-# Сборка
-docker-compose build
-```
+Команды для работы с приложением:
 
-```shell
-# Запуск
-docker-compose up -d
-```
+### Сборка образа
+  ```shell
+  docker-compose build
+  ```
 
-Для остановки контейнеров и освобождения ресурсов выполните:
-```shell
-docker-compose down
-```
+### Запуск контейнеров
+  ```shell
+  docker-compose up -d
+  ```
 
-Когда контейнеры запущены необходимо зайти в них и выполнить script на Python.
+### Выполнение ПО на клиентах
+  ```shell
+  docker-compose exec scapy-client-1 python client.py
+  ```
+  ```shell
+  docker-compose exec scapy-client-2 python client.py
+  ```
 
-Клиент 1
-```shell
-docker-compose exec scapy-client-1 python client.py
-```
-
-Клиент 2
-```shell
-docker-compose exec scapy-client-2 python client.py
-```
-
-Сервер:
-```shell
-docker-compose exec scapy-server python server.py
-```
-
-Программы общаются через интерфейс `eth0`
+### Выполнение ПО на сервере
+  ```shell
+  docker-compose exec scapy-server python server.py
+  ```
+  
+### Остановка контейнеров
+  ```shell
+  docker-compose down
+  ```

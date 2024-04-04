@@ -1,3 +1,4 @@
+import logging
 from threading import Thread
 
 import scapy.all as scapy
@@ -6,6 +7,9 @@ from scapy.interfaces import NetworkInterface
 
 from ..core import config
 from ..db.db import Database
+
+
+logger = logging.getLogger(__name__)
 
 
 class Receiver(Thread):
@@ -18,7 +22,7 @@ class Receiver(Thread):
         self.is_run = True
 
     def run(self):
-        scapy.sniff(filter=config.FILTER_PAC, prn=self.__handler, iface=self.iface, stop_filter=self.__stop_filter)
+        scapy.sniff(filter=config.FILTER_PAC_SERVER, prn=self.__handler, iface=self.iface, stop_filter=self.__stop_filter)
 
     def stop(self):
         self.is_run = False
@@ -37,19 +41,17 @@ class Receiver(Thread):
 
         msg = raw_pac.load.decode("utf-8") if raw_pac.load else ""
 
-        print(f"{ip_pac.src} >>> {self.iface.ip} | INPUT '{msg}'")
+        logger.info(f"incoming request {ip_pac.src} >>> {self.iface.ip}, raw = {msg}")
 
         if not msg.startswith("answer->"):
-            return
-
-        ip_clients, in_cache = self.db.get_ip_clients()
-        if ip_pac.src not in ip_clients:
             return
 
         answer: float
         try:
             answer = float(msg.replace("answer->", ""))
-        except ValueError:
+            self.db.add_log_confidence_factor(ip_pac.src, answer)
+        except ValueError as e:
+            logger.error(f"error parse: {e}")
             return
 
-        self.db.add_log_confidence_factor(ip_pac.src, answer)
+
