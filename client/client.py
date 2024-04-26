@@ -56,4 +56,9 @@ def proc_func(packet: scapy.packet.Packet):
 
 if __name__ == "__main__":
     logger.debug(f"start client [IP = {IFACE.ip}]")
+
+    logger.info(f"IP_SERVER = {config.IP_SERVER}")
+    logger.info(f"PORT = {config.PORT}")
+    logger.info(f"IFACE_NAME = {config.IFACE_NAME}")
+
     scapy.sniff(filter=config.FILTER_PAC_CLIENT, prn=proc_func, iface=IFACE)

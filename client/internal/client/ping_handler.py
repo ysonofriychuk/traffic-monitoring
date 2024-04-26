@@ -1,10 +1,4 @@
 import scapy.all as scapy
-from scapy.fields import FlagValue
-from scapy.layers.inet import IP, TCP
-from scapy.interfaces import NetworkInterface
-
-from ..core import config
-from ..core.settings import SETTINGS
 
 
 def handler(raw_pac: scapy.Raw):

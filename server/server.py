@@ -6,12 +6,11 @@ import sys
 import time
 from datetime import datetime
 
-from internal.core import core
+from internal.core import core, config
 from internal.server.checker import Checker
 from internal.db.db import Database
 from internal.server.receiver import Receiver
 from internal.server.pinger import Pinger
-
 
 IFACE = core.get_iface()
 
@@ -34,10 +33,15 @@ if __name__ == '__main__':
 
     logger.debug(f"start server [IP = {IFACE.ip}]")
 
-    pinger = Pinger(IFACE, db, delay=60)
+    logger.info(f"IP_SERVER = {config.IP_SERVER}")
+    logger.info(f"IPS_MASK = {config.IPS_MASK}")
+    logger.info(f"PORT = {config.PORT}")
+    logger.info(f"IFACE_NAME = {config.IFACE_NAME}")
+
+    pinger = Pinger(IFACE, db, delay=60*15)
     pinger.start()
 
-    checker = Checker(IFACE, db, delay=10)
+    checker = Checker(IFACE, db, delay=60)
     checker.start()
 
     receiver = Receiver(IFACE, db)
@@ -52,7 +56,6 @@ if __name__ == '__main__':
         time.sleep(5)
         logger.debug("shutdown")
         sys.exit(0)
-
 
     signal.signal(signal.SIGTERM, sigterm_handler)
     signal.signal(signal.SIGINT, sigterm_handler)
