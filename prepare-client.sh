@@ -1,7 +1,7 @@
 #!/bin/sh
 
 apt-get update
-apt-get -y install gcc python3-dev tcpdump graphviz imagemagick swig libpcap-dev iputils-ping
+apt-get -y install gcc python3-dev tcpdump graphviz imagemagick swig libpcap-dev iputils-ping python3-pip
 
 rm -r ./server
 rm -r ./docker

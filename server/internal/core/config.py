@@ -1,6 +1,12 @@
 import os
 import socket
 
+from dotenv import load_dotenv
+
+dotenv_path = os.path.join(os.path.dirname(__file__), "..", "..", "env.env")
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
 IPS_MASK = os.getenv("IPS_MASK_MONITORING")
 IP_SERVER = os.getenv("IP_SERVER_MONITORING")
 IFACE_NAME = os.getenv("IFACE_NAME_MONITORING")
