@@ -9,16 +9,7 @@ apt-get -y install \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common \
-    gcc \
-    python3-dev \
-    tcpdump \
-    graphviz \
-    imagemagick \
-    swig \
-    libpcap-dev \
-    iputils-ping \
-    python3-pip
+    software-properties-common
 
 
 # Добавление официального ключа GPG Docker
@@ -37,17 +28,5 @@ apt-get -y install docker-ce docker-ce-cli containerd.io
 # Удаление пакетов, которые больше не нужны
 apt-get -y autoremove
 
-# Удаление пакетов, используемых в установке Docker
-apt-get -y purge \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
-
 # Очистка кэша пакетов
 apt-get clean
-
-# Удаление временных файлов
-rm -rf /var/lib/apt/lists/*
-rm -rf /tmp/*
