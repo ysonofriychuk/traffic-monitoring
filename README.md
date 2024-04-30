@@ -49,3 +49,14 @@ TODO: добавить схему обмена
   ```shell
   docker-compose down
   ```
+
+
+Запуск на виртуальных машинах
+
+```shell
+docker build -t exp-net-scapy -f docker/scapy.Dockerfile .
+```
+
+```shell
+docker run -p 4888:4888 --name exp-scapy-server -v $(pwd)/server:/scapy/src -d exp-net-scapy
+```
