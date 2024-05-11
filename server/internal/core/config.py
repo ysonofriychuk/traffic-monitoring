@@ -18,9 +18,6 @@ if not IP_SERVER:
 if not PORT:
     PORT = "48888"
 
-if not IFACE_NAME:
-    IFACE_NAME = "eth0"
-
 if not IPS_MASK:
     IPS_MASK = ".".join(IP_SERVER.split(".")[:-1]) + ".0/24"
 

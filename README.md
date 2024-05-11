@@ -36,10 +36,10 @@
 
 ### Выполнение ПО
   ```shell
-  docker-compose exec scapy-server python server.py
+  docker-compose -f server.docker-compose.yml exec scapy-server python server.py
   ```
   ```shell
-  docker-compose exec scapy-client python client.py
+  docker-compose -f client.docker-compose.yml exec scapy-client python client.py
   ```
   
 ### Остановка контейнеров

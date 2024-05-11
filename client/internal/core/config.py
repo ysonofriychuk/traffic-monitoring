@@ -13,9 +13,6 @@ PORT = os.getenv("PORT_MONITORING")
 if not PORT:
     PORT = "48888"
 
-if not IFACE_NAME:
-    IFACE_NAME = "eth0"
-
 FILTER_PAC_CLIENT = f"src host {IP_SERVER} and port {PORT} and tcp"
 
 if not IP_SERVER:

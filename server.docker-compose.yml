@@ -12,6 +12,7 @@ services:
     stdin_open: true
     volumes:
       - ./server:/scapy/src
-    ports:
-      - "48888:48888"
-    network_mode: host
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
