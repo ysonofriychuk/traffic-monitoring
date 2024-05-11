@@ -2,10 +2,6 @@
 
 ## Описание
 
-Проект представлен двумя основными файлами:
-- [client.py](src%2Fclient.py)
-- [server.py](src%2Fserver.py)
-
 Сервер отвечает за периодическую отправку пакетов 
 клиентам внутри сети со сбором статистики о коэффициенте 
 достоверности.
@@ -13,50 +9,43 @@
 Клиент получает эти пакеты, рассчитывает коэффициент достоверности и 
 отправляет ответ обратно серверу.
 
-TODO: добавить схему обмена
-
 ## Запуск и тестирование приложения
 
 Перед началом работы убедитесь, что установлен Docker и Docker Compose, 
-а также, проверьте [config.py](src%2Finternal%2Fcore%2Fconfig.py) файл с настройками.
+а также, проверьте `env.env` файлы с настройками.
+
+Далее нужно запускать команды в зависимости от типа виртуальной машины (сервер/клиент)
 
 Команды для работы с приложением:
 
-### Сборка образа
+### Сборка
   ```shell
-  docker-compose build
+  docker-compose -f server.docker-compose.yml build
+  ```
+  ```shell
+  docker-compose -f client.docker-compose.yml build
   ```
 
-### Запуск контейнеров
+### Запуск
   ```shell
-  docker-compose up -d
+  docker-compose -f server.docker-compose.yml up -d
+  ```
+  ```shell
+  docker-compose -f client.docker-compose.yml up -d
   ```
 
-### Выполнение ПО на клиентах
-  ```shell
-  docker-compose exec scapy-client-1 python client.py
-  ```
-  ```shell
-  docker-compose exec scapy-client-2 python client.py
-  ```
-
-### Выполнение ПО на сервере
+### Выполнение ПО
   ```shell
   docker-compose exec scapy-server python server.py
+  ```
+  ```shell
+  docker-compose exec scapy-client python client.py
   ```
   
 ### Остановка контейнеров
   ```shell
-  docker-compose down
+  docker-compose -f server.docker-compose.yml down
   ```
-
-
-Запуск на виртуальных машинах
-
-```shell
-docker build -t exp-net-scapy -f docker/scapy.Dockerfile .
-```
-
-```shell
-docker run -p 4888:4888 --name exp-scapy-server -v $(pwd)/server:/scapy/src -d exp-net-scapy
-```
+  ```shell
+  docker-compose -f client.docker-compose.yml down
+  ```

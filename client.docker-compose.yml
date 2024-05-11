@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  scapy-client:
+    build:
+      context: .
+      dockerfile: docker/server.Dockerfile
+    hostname: scapy
+    container_name: exp-scapy-client
+    image: exp-net-scapy
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./client:/scapy/src
+    ports:
+      - "48888:48888"
+    network_mode: host
