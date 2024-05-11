@@ -12,40 +12,60 @@
 ## Запуск и тестирование приложения
 
 Перед началом работы убедитесь, что установлен Docker и Docker Compose, 
-а также, проверьте `env.env` файлы с настройками.
+а также, проверьте `env.env` файлы с настройками, которые находятся в директориях
+`server` и `client`. Необходимо настраивать только тот файл, который будет использоваться
+в виртуальной машине.
 
-Далее нужно запускать команды в зависимости от типа виртуальной машины (сервер/клиент)
+Обратите внимание, что можно не указывать `IFACE_NAME_MONITORING`, тогда нужно будет его выбрать
+после запуска ПО в контейнере. Также, `IPS_MASK_MONITORING` можно пропустить, тогда она автоматически
+построится на основе IP сервера. Все остальные параметры указывать обязательно.
 
-Команды для работы с приложением:
+Логи хранятся в директориях по путям `server/logs` и `client/logs`. База данных, заполняемая сервером,
+хранится в `server/db`.
 
-### Сборка
+Ниже перечислены команды для запуска в зависимости от типа виртуальной машины (сервер/клиент).
+
+### Сервер
+
+#### Сборка
   ```shell
   docker-compose -f server.docker-compose.yml build
   ```
+
+#### Запуск
+  ```shell
+  docker-compose -f server.docker-compose.yml up -d
+  ```
+
+#### Выполнение ПО
+  ```shell
+  docker-compose -f server.docker-compose.yml exec scapy-server python server.py
+  ```
+  
+#### Остановка контейнеров
+  ```shell
+  docker-compose -f server.docker-compose.yml down
+  ```
+
+### Клиент
+
+#### Сборка
   ```shell
   docker-compose -f client.docker-compose.yml build
   ```
 
-### Запуск
+#### Запуск
   ```shell
-  docker-compose -f server.docker-compose.yml up -d
-  ```
   ```shell
   docker-compose -f client.docker-compose.yml up -d
   ```
 
-### Выполнение ПО
-  ```shell
-  docker-compose -f server.docker-compose.yml exec scapy-server python server.py
-  ```
+#### Выполнение ПО
   ```shell
   docker-compose -f client.docker-compose.yml exec scapy-client python client.py
   ```
   
-### Остановка контейнеров
-  ```shell
-  docker-compose -f server.docker-compose.yml down
-  ```
+#### Остановка контейнеров
   ```shell
   docker-compose -f client.docker-compose.yml down
   ```
