@@ -14,7 +14,7 @@ def get_iface(iface_name=config.IFACE_NAME) -> NetworkInterface:
             print(f"Name: {name}")
 
         while True:
-            iface_name = input("enter interface name >>> ").lower()
+            iface_name = input("enter interface name: ").lower()
             if iface_name in d:
                 break
             print("Wrong name")
