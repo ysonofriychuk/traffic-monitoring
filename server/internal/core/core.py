@@ -13,14 +13,14 @@ def get_iface(iface_name=config.IFACE_NAME) -> NetworkInterface:
     }
 
     if not config.IFACE_NAME:
-        for name, iface_obj in d.items():
-            print(f"Name: {name}\n\tObj: {iface_obj}")
+        for name, _ in d.items():
+            print(f"Name: {name}")
 
         while True:
-            iface_name = input("Введите название интерфейса >>> ").lower()
+            iface_name = input("enter interface name >>> ").lower()
             if iface_name in d:
                 break
-            print("Неверное название")
+            print("Wrong name")
 
     if iface_name not in d:
         raise f"{iface_name} iface not found"
