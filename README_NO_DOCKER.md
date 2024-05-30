@@ -24,12 +24,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Запуск необходимо скрипта
+Запуск необходимого скрипта
 
 ```shell
-python3 server/server.py
+cd server
+python3 server.py
 ```
 
 ```shell
-python3 client/client.py
+cd client
+python3 client.py
 ```
