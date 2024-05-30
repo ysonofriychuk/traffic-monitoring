@@ -4,7 +4,7 @@ services:
   scapy-server:
     build:
       context: .
-      dockerfile: docker/server.Dockerfile
+      dockerfile: server.Dockerfile
     hostname: scapy
     container_name: exp-scapy-server
     image: exp-net-scapy
@@ -21,7 +21,7 @@ services:
   scapy-client-1:
     build:
       context: .
-      dockerfile: docker/server.Dockerfile
+      dockerfile: server.Dockerfile
     hostname: scapy
     container_name: exp-scapy-client-1
     image: exp-net-scapy
@@ -38,7 +38,7 @@ services:
   scapy-client-2:
     build:
       context: .
-      dockerfile: docker/server.Dockerfile
+      dockerfile: server.Dockerfile
     hostname: scapy
     container_name: exp-scapy-client-2
     image: exp-net-scapy

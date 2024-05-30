@@ -7,7 +7,7 @@ RUN apt-get update && \
     swig libpcap-dev iputils-ping && \
     apt-get clean
 
-COPY ../requirements.txt /tmp/
+COPY requirements.txt /tmp/
 
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
